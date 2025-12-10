@@ -1,0 +1,58 @@
+# shm
+#structural health monitor 
+#include "DHT.h"
+
+// ---- Pin Definitions for ESP32 ----
+// Using common ESP32 GPIO pins (e.g., 21 and 22). 
+// **WARNING**: Avoid using GPIO 0, 2, 4, 5, 12, 15, 27, and 33 for general
+// use during boot, as they can affect the boot process (especially GPIO 0, 2, 4, 12, 15).
+#define DHTPIN1 21       // DHT11 #1 data pin on ESP32
+#define DHTPIN2 22       // DHT11 #2 data pin on ESP32
+
+#define DHTTYPE DHT11   // Sensor type
+
+// ---- Sensor Objects ----
+DHT dht1(DHTPIN1, DHTTYPE);
+DHT dht2(DHTPIN2, DHTTYPE);
+
+void setup() {
+  // Serial setup remains the same
+  Serial.begin(115200); // Increased baud rate is common for ESP32
+
+  dht1.begin();
+  dht2.begin();
+
+  Serial.println("Two DHT11 Sensor Test on ESP32");
+}
+
+void loop() {
+  // Read Sensor #1
+  float h1 = dht1.readHumidity();
+  float t1 = dht1.readTemperature();
+
+  // Read Sensor #2
+  float h2 = dht2.readHumidity();
+  float t2 = dht2.readTemperature();
+
+  // Check for failure
+  if (isnan(h1) || isnan(t1) || isnan(h2) || isnan(t2)) {
+    Serial.println("Failed to read from one or both of the DHT11 sensors!");
+    delay(2000); // Increased delay for failure state
+    return;
+  }
+
+  // ---- Combined Output ----
+  Serial.print("S1: ");
+  Serial.print(t1);
+  Serial.print("°C, ");
+  Serial.print(h1);
+  Serial.print("%   |   ");
+
+  Serial.print("S2: ");
+  Serial.print(t2);
+  Serial.print("°C, ");
+  Serial.print(h2);
+  Serial.println("%");
+
+  delay(1500); // Read every ~1.5 seconds
+}
