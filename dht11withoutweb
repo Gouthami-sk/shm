@@ -1,6 +1,6 @@
 # shm
 #structural health monitor 
-#include "DHT.h"
+include "DHT.h"
 
 // ---- Pin Definitions for ESP32 ----
 // Using common ESP32 GPIO pins (e.g., 21 and 22). 
